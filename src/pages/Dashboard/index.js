@@ -196,11 +196,12 @@ export default function Dashboard() {
                                                     style={{
                                                         backgroundColor:
                                                             '#F6a935',
-                                                    }} to={`/new/${item.id}`}
+                                                    }}
+                                                    to={`/new/${item.id}`}
                                                 >
                                                     <FiEdit2
                                                         color="#FFF"
-                                                        size={17} 
+                                                        size={17}
                                                     />
                                                 </Link>
                                             </td>

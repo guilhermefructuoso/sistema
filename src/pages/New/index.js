@@ -11,7 +11,7 @@ import './new.css'
 import { FiPlusCircle } from 'react-icons/fi'
 
 export default function New() {
-    const { id } =useParams()
+    const { id } = useParams()
     const history = useHistory()
     const [loadCustomers, setLoadCustomers] = useState(true)
     const [customers, setCustomers] = useState([])
@@ -49,7 +49,7 @@ export default function New() {
                     setCustomers(lista)
                     setLoadCustomers(false)
 
-                    if(id){
+                    if (id) {
                         loadId(lista)
                     }
                 })
@@ -63,50 +63,57 @@ export default function New() {
         loadCustomers()
     }, [id])
 
-    async function loadId(lista){
-        await firebase.firestore().collection('chamados').doc(id)
-        .get()
-        .then((snapshot)=>{
-            setAssunto(snapshot.data().assunto)
-            setStatus(snapshot.data().status)
-            setComplemento(snapshot.data().complemento)
+    async function loadId(lista) {
+        await firebase
+            .firestore()
+            .collection('chamados')
+            .doc(id)
+            .get()
+            .then((snapshot) => {
+                setAssunto(snapshot.data().assunto)
+                setStatus(snapshot.data().status)
+                setComplemento(snapshot.data().complemento)
 
-            let index = lista.findIndex(item => item.id === snapshot.data().clienteId )
-            setCustomerSelected(index);
-            setIdCustomer(true)
-        })
-        .catch((err)=>{
-            console.log('ERRO NO ID PASSADO', err)
-            setIdCustomer(false)
-        })
+                let index = lista.findIndex(
+                    (item) => item.id === snapshot.data().clienteId
+                )
+                setCustomerSelected(index)
+                setIdCustomer(true)
+            })
+            .catch((err) => {
+                console.log('ERRO NO ID PASSADO', err)
+                setIdCustomer(false)
+            })
     }
 
     async function handleRegister(e) {
         e.preventDefault()
 
-        if(idCustomer){
-            await firebase.firestore().collection('chamados')
-            .doc(id)
-            .update({
-                cliente: customers[customerSelected].nomeFantasia,
-                clienteId: customers[customerSelected].id,
-                assunto: assunto,
-                status: status,
-                complemento: complemento,
-                userId: user.uid
-            })
-            .then(()=>{
-                toast.success('Chamado editado com sucesso!')
-                setCustomerSelected('')
-                setComplemento('')
-                history.push('/dashboard')
-            })
-            .catch((err)=>{
-                toast.error('Ops erro ao registrar, tente mais tarde')
-                console.log(err)
-            })
+        if (idCustomer) {
+            await firebase
+                .firestore()
+                .collection('chamados')
+                .doc(id)
+                .update({
+                    cliente: customers[customerSelected].nomeFantasia,
+                    clienteId: customers[customerSelected].id,
+                    assunto: assunto,
+                    status: status,
+                    complemento: complemento,
+                    userId: user.uid,
+                })
+                .then(() => {
+                    toast.success('Chamado editado com sucesso!')
+                    setCustomerSelected('')
+                    setComplemento('')
+                    history.push('/dashboard')
+                })
+                .catch((err) => {
+                    toast.error('Ops erro ao registrar, tente mais tarde')
+                    console.log(err)
+                })
 
-            return;
+            return
         }
 
         await firebase
@@ -119,7 +126,7 @@ export default function New() {
                 assunto: assunto,
                 status: status,
                 complemento: complemento,
-                userId: user.uid
+                userId: user.uid,
             })
             .then(() => {
                 toast.success('Chamado criado com sucesso!')
